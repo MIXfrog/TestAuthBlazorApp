@@ -1,0 +1,46 @@
+﻿@page "/"
+@inject NavigationManager _navigationManager
+@inject IAuthService AuthService
+
+@if (AuthService.User != null)
+{
+    <PageTitle>Index</PageTitle>
+
+    <h1>Hello, @Username!</h1>
+
+    <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px" @onclick="SignOut">Sign Out</button>
+
+    @code {
+
+    private string Username = "";
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (AuthService.User == null)
+        {
+            _navigationManager.NavigateTo("/signin");
+        }
+        if (!string.IsNullOrEmpty(AuthService.User?.Name))
+        {
+            Username = AuthService.User.Name;
+        }
+    }
+
+    private async Task RandomMethod()
+    {
+        
+    }
+
+    private async Task SignOut()
+    {
+        await AuthService.Logout();
+        StateHasChanged();
+        _navigationManager.NavigateTo("/signin");
+    }
+    }
+}
+else
+{
+    <h1>Sorry, you must log in to proceed</h1>
+}
+
