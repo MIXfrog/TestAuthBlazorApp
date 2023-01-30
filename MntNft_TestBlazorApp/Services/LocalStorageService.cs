@@ -1,7 +1,7 @@
 ﻿using Microsoft.JSInterop;
 using System.Text.Json;
 
-namespace MntNft_TestBlazorApp
+namespace MntNft_TestBlazorApp.Services
 {
     public interface ILocalStorageService
     {

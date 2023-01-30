@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using MntNft_TestBlazorApp.Services;
 @inject NavigationManager _navigationManager
 @inject IAuthService AuthService
 
@@ -24,11 +25,6 @@
         {
             Username = AuthService.User.Name;
         }
-    }
-
-    private async Task RandomMethod()
-    {
-        
     }
 
     private async Task SignOut()

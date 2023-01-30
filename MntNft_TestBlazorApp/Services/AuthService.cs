@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.AspNetCore.Components;
 
-namespace MntNft_TestBlazorApp
+namespace MntNft_TestBlazorApp.Services
 {
     public interface IAuthService
     {
