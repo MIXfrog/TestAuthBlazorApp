@@ -6,13 +6,13 @@ namespace MntNft_TestBlazorApp.Services
     public interface IAuthService
     {
         User User { get; }
-        Task Login(string mail, string password);
+        Task Login(string login, string password);
         Task Logout();
     }
 
     public class AuthService : IAuthService
     {
-        private const string CorrectEmail = "testMail@gmail.com";
+        private const string CorrectLogin = "TestLogin";
         private const string CorrectPassword = "password";
 
         public User User { get; private set; }
@@ -27,13 +27,13 @@ namespace MntNft_TestBlazorApp.Services
             _navigationManager = navigationManager;
         }
 
-        public async Task Login(string mail, string password)
+        public async Task Login(string login, string password)
         {
-            if (mail.Equals(CorrectEmail) && password.Equals(CorrectPassword))
+            if (login.Equals(CorrectLogin) && password.Equals(CorrectPassword))
             {
-                User = new User { Name = "TestUser", Email = CorrectEmail, Password = CorrectPassword };
+                User = new User { Login = CorrectLogin, Password = CorrectPassword, Name = "TestUserName" };
 
-                User.AuthData = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{mail}:{password}"));
+                User.AuthData = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{login}:{password}"));
                 await _localStorageService.SetItem("user", User);
             }
         }

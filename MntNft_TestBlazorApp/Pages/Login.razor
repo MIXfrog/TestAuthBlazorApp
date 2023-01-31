@@ -11,8 +11,8 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <label for="Email">Email</Label>
-    <InputText id="Email" @bind-Value="signinModel.Email" />
+    <label for="Login">Login</Label>
+    <InputText id="Login" @bind-Value="signinModel.Login" />
     <label for="Password">Password</Label>
     <InputText id="Password" @bind-Value="signinModel.Password" type="password" />
 
@@ -41,7 +41,7 @@
         try
         {
             // getting auth token
-            await AuthService.Login(signinModel.Email, signinModel.Password);
+            await AuthService.Login(signinModel.Login, signinModel.Password);
             if (AuthService.User != null)
             {
                 NavigationManager.NavigateTo("/");
@@ -62,8 +62,7 @@
     public class SigninModel
     {
         [Required]
-        [EmailAddress(ErrorMessage = "Email address is incorrect")]
-        public string? Email { get; set; }
+        public string? Login { get; set; }
 
         [Required]
         [MinLength(6, ErrorMessage = "Password must contain at least 6 characters")]
