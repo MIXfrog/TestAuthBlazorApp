@@ -1,7 +1,16 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using MntNft_TestBlazorApp.Pages
+@inject NavigationManager _navigationManager
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" >
-            </RouteView>
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @{
+                        _navigationManager.NavigateTo("/signin");
+                    }
+                </NotAuthorized>
+            </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>
@@ -11,3 +20,4 @@
             </LayoutView>
         </NotFound>
     </Router>
+</CascadingAuthenticationState>

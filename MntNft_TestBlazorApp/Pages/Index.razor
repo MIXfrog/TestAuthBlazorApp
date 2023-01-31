@@ -1,42 +1,43 @@
 ﻿@page "/"
-@using MntNft_TestBlazorApp.Services;
 @inject NavigationManager _navigationManager
-@inject IAuthService AuthService
+@inject AuthenticationStateProvider _authStateProvider
+@inject ILocalStorageService _localStorageService
+@using MntNft_TestBlazorApp.Services;
+@attribute [Authorize]
 
-@if (AuthService.User != null)
-{
-    <PageTitle>Index</PageTitle>
+<PageTitle>Index</PageTitle>
 
-    <h1>Hello, @Username!</h1>
+<AuthorizeView>
+    <Authorized>
+        <h1>Hello, user</h1>
 
-    <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px" @onclick="SignOut">Sign Out</button>
+        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px" @onclick="SignOut">Sign Out</button>
+    </Authorized>
+</AuthorizeView>
 
-    @code {
+@code {
 
-    private string Username = "";
+    private string userName;
 
     protected async override Task OnInitializedAsync()
     {
-        if (AuthService.User == null)
+        /*var state = await _authStateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        if (!user.Identity.IsAuthenticated)
         {
             _navigationManager.NavigateTo("/signin");
         }
-        if (!string.IsNullOrEmpty(AuthService.User?.Name))
+        else
         {
-            Username = AuthService.User.Name;
-        }
+            userName = user.Identity.Name;
+        }*/
     }
 
     private async Task SignOut()
     {
-        await AuthService.Logout();
-        StateHasChanged();
-        _navigationManager.NavigateTo("/signin");
+        await _localStorageService.RemoveItem("token");
+        await _authStateProvider.GetAuthenticationStateAsync();
     }
-    }
-}
-else
-{
-    <h1>Sorry, you must log in to proceed</h1>
 }
 

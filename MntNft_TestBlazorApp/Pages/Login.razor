@@ -1,7 +1,8 @@
 ﻿@page "/signin"
-@inject HttpClient HttpClient
-@inject IAuthService AuthService
-@inject NavigationManager NavigationManager
+@inject NavigationManager _navigationManager
+@inject AuthenticationStateProvider _authStateProvider
+@inject ILocalStorageService _localStorageService
+@attribute [AllowAnonymous]
 @using System.ComponentModel.DataAnnotations;
 @using MntNft_TestBlazorApp.Services;
 
@@ -17,6 +18,7 @@
     <InputText id="Password" @bind-Value="signinModel.Password" type="password" />
 
     <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px">Sign In</button>
+
     @if (!string.IsNullOrEmpty(error))
     {
         <div class="alert alert-danger mt-3 mb-0">@error</div>
@@ -28,33 +30,27 @@
     private SigninModel signinModel = new();
     private string error;
 
-    protected override void OnInitialized()
+    private const string CorrectLogin = "TestUserLogin";
+    private const string CorrectPassword = "password";
+
+    protected async override Task OnInitializedAsync()
     {
-        if (AuthService.User != null)
-        {
-            NavigationManager.NavigateTo("/");
-        }
     }
 
-    private async Task SignIn()
+    public async Task SignIn()
     {
-        try
+        if (signinModel.Login.Equals(CorrectLogin) && signinModel.Password.Equals(CorrectPassword))
         {
-            // getting auth token
-            await AuthService.Login(signinModel.Login, signinModel.Password);
-            if (AuthService.User != null)
-            {
-                NavigationManager.NavigateTo("/");
-            }
-            else
-            {
-                error = "User not found";
-                StateHasChanged();
-            }
+            //get token from auth service by SigninModel params
+            var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IlRlc3RVc2VyTG9naW4iLCJuYW1lIjoiVGVzdFVzZXJOYW1lIiwiaWF0IjoxNTE2MjM5MDIyfQ._WG7aGpzOFhOc7E8s7uJOpSHbCEuIXt--_fb9KLOtHM";
+
+            await _localStorageService.SetItem("token", token);
+            _authStateProvider.GetAuthenticationStateAsync();
+            _navigationManager.NavigateTo("/");
         }
-        catch (Exception ex)
+        else
         {
-            error = ex.Message;
+            error = "User not found";
             StateHasChanged();
         }
     }
