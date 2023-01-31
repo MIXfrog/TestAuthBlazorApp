@@ -35,6 +35,13 @@
 
     protected async override Task OnInitializedAsync()
     {
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
+        var user = state.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            _navigationManager.NavigateTo("/");
+        }
     }
 
     public async Task SignIn()
@@ -45,7 +52,7 @@
             var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IlRlc3RVc2VyTG9naW4iLCJuYW1lIjoiVGVzdFVzZXJOYW1lIiwiaWF0IjoxNTE2MjM5MDIyfQ._WG7aGpzOFhOc7E8s7uJOpSHbCEuIXt--_fb9KLOtHM";
 
             await _localStorageService.SetItem("token", token);
-            _authStateProvider.GetAuthenticationStateAsync();
+            await _authStateProvider.GetAuthenticationStateAsync();
             _navigationManager.NavigateTo("/");
         }
         else

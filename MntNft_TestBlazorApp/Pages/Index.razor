@@ -3,35 +3,28 @@
 @inject AuthenticationStateProvider _authStateProvider
 @inject ILocalStorageService _localStorageService
 @using MntNft_TestBlazorApp.Services;
+@using System.Security.Claims;
 @attribute [Authorize]
 
 <PageTitle>Index</PageTitle>
 
-<AuthorizeView>
-    <Authorized>
-        <h1>Hello, user</h1>
+<h1>Hello, @userName</h1>
 
-        <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px" @onclick="SignOut">Sign Out</button>
-    </Authorized>
-</AuthorizeView>
+<button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px" @onclick="SignOut">Sign Out</button>
 
 @code {
 
-    private string userName;
+    private string? userName;
 
     protected async override Task OnInitializedAsync()
     {
-        /*var state = await _authStateProvider.GetAuthenticationStateAsync();
+        var state = await _authStateProvider.GetAuthenticationStateAsync();
         var user = state.User;
 
-        if (!user.Identity.IsAuthenticated)
+        if (user.Identity != null && user.Identity.IsAuthenticated)
         {
-            _navigationManager.NavigateTo("/signin");
+            userName = user.FindFirst("name")?.Value;
         }
-        else
-        {
-            userName = user.Identity.Name;
-        }*/
     }
 
     private async Task SignOut()
