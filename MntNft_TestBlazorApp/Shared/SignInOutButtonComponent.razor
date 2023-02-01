@@ -1,0 +1,10 @@
+﻿
+<button type="submit" class="btn btn-primary" style="margin-top: 10px; margin-bottom:10px; width:80px" @onclick="Click">@ButtonText</button>
+
+@code {
+    [Parameter]
+    public string ButtonText { get; set; } = "Edit";
+
+    [Parameter]
+    public EventCallback Click { get; set; }
+}   

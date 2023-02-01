@@ -17,7 +17,7 @@
     <label for="Password">Password</Label>
     <InputText id="Password" @bind-Value="signinModel.Password" type="password" />
 
-    <button type="submit" class="btn btn-primary" style="margin-top: 10px; width:80px">Sign In</button>
+    <SignInOutButtonComponent ButtonText="Sign In" />
 
     @if (!string.IsNullOrEmpty(error))
     {
